@@ -9,7 +9,7 @@ from langchain.schema.runnable import RunnablePassthrough
 #from langchain.vectorstores import chroma
 from langchain.vectorstores import Chroma
 
-OPEN_API_KEY = "sk-proj-Cg7dOq3JFCcOP3NouH2oT3BlbkFJtmKvA6zZEjbzGHYMfM5T"
+OPEN_API_KEY = ""
 MODEL = "gpt-4-turbo"
 template: str = """/
     You are a support specialist for developers using documentation provided /
