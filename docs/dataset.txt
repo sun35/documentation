@@ -1,0 +1,442 @@
+Intelligent Test Runner
+Infrastructure
+Logs
+Applications
+Security
+Digital Experience
+Software Delivery
+Platform Capabilities
+Industry
+Technology
+Use-case
+Looking for Datadog logos?
+You can find the logo assets on our press page.
+Datadog Docs
+Essentials
+In The App
+Service Management
+Infrastructure
+Application Performance
+Digital Experience
+Software Delivery
+Security
+Log Management
+Administration
+Intelligent Test Runner is Datadog’s test impact analysis solution. It automatically selects and runs only the relevant tests for a given commit based on the code being changed. Significantly reduce time spent testing and overall CI costs, while maintaining test coverage.
+Intelligent Test Runner works by analyzing your test suite to identify the code each test covers. It then cross-references that coverage with the files impacted by a new code change. Datadog uses this information to run a selection of relevant, impacted tests, omitting the ones unaffected by the code change and reducing the overall testing duration. Find out more details aboutHow It Works.
+By minimizing the number of tests run per commit, Intelligent Test Runner reduces the frequency offlaky testsdisrupting your pipelines. This can be particularly frustrating when the test flaking is unrelated to the code change being tested. After enabling Intelligent Test Runner for your test services, you can limit each commit to its relevant tests to ensure that flaky tests unrelated to your code change don’t end up arbitrarily breaking your build.
+With the default configuration, there are known situations that can cause Intelligent Test Runner to skip tests that should have been run. Specifically, Intelligent Test Runner is not able to automatically detect changes in:
+In these scenarios, Intelligent Test Runner might skip impacted tests with the out-of-the-box configuration.
+There are several configuration mechanisms that you can use in these scenarios to ensure that no tests are skipped:
+Before setting up Intelligent Test Runner, you must configureTest Visibilityfor your particular language. If you are reporting data through the Agent, use v6.40 or 7.40 and later.
+Choose a language to set up Intelligent Test Runner in Datadog:
+Once you have set up your Datadog library for Intelligent Test Runner, configure it from theTest Service Settingspage. Enabling Intelligent Test Runner requires theIntelligent Test Runner Activation Writepermission.
+Due to thelimitationsdescribed above, the default branch of your repository is automatically excluded from having Intelligent Test Runner enabled. Datadog recommends this configuration to ensure that all of your tests run prior to reaching production.
+If there are other branches you want to exclude, add them on the Test Service Settings page. The query bar supports using the wildcard character*to exclude any branches that match, such asrelease_*.
+Excluded branches collect per-test code coverage, which has a performance impact on the total testing time. However, this performance impact is mitigated by only collecting code coverage when Datadog detects that running with code coverage generates enough new coverage information that it offsets the cost of collecting the coverage. You can check whether a test session has code coverage enabled or not by looking at the@test.code_coverage.enabledfield.
+Tracked files are non-code files that can potentially impact your tests. Changes in tracked files could make your tests fail or change the code coverage of your tests. Examples of files that are good candidates to add as tracked files are:
+When you specify a set of tracked files, Intelligent Test Runner runs all tests if any of these files change.
+You may use the*and**wildcard characters to match multiple files or directories. For instance,**/*.mdxmatches any.mdxfile in the repository.
+You can explore the time savings you get from Intelligent Test Runner by looking at the test commit page and test sessions panel.
+When Intelligent Test Runner is active and skipping tests, purple text displays the amount of time saved on each test session or on each commit. The duration bar also changes color to purple so you can identify which test sessions are using Intelligent Test Runner on theTest Runspage.
+Track your organization’s savings and adoption of Intelligent Test Runner through the out-of-the-boxIntelligent Test Runner dashboard. The dashboard includes widgets to track your overall savings as well as a per-repository, per-committer, and per-service view of the data. View the dashboard to understand which parts of your organization are using and getting the most out of Intelligent Test Runner.
+The dashboard also tracks adoption of Intelligent Test Runner throughout your organization.
+Additional helpful documentation, links, and articles:
+Language
+Datadog Site
+On this Page
+
+
+Our friendly, knowledgeable solutions engineers are here to help!
+Download mobile app
+Product
+resources
+About
+BlogHow Intelligent Test Runner Works in Datadog
+Infrastructure
+Logs
+Applications
+Security
+Digital Experience
+Software Delivery
+Platform Capabilities
+Industry
+Technology
+Use-case
+Looking for Datadog logos?
+You can find the logo assets on our press page.
+Datadog Docs
+Essentials
+In The App
+Service Management
+Infrastructure
+Application Performance
+Digital Experience
+Software Delivery
+Security
+Log Management
+Administration
+Intelligent Test Runner is Datadog’s test impact analysis solution. Test impact analysis is a technique that has gained popularity over the past few decades. However, it’s typically hard and time-consuming to implement. Intelligent Test Runner simplifies this complexity.
+Test impact analysis maps each test to the set of code files in your repository that the test uses (per test code coverage). Its goal is to skip tests not affected by the code changes. This leads to a direct reduction in time spent testing in CI.
+An extreme example is a pull request that only changes a typo in a README file. For that PR, running all tests doesn’t provide any value. On the contrary, flaky tests might make your CI fail, forcing you to retry the pipeline, potentially multiple times, before merging. This is a waste of both developer and CI time. With Intelligent Test Runner, a PR changing a README file would skip all tests.
+Some test selection solutions don’t rely on code coverage data and make up for it by using machine learning. These systems infer which tests are relevant in a probabilistic fashion and might miss tests that were relevant, leading to build failures in your default branch. Machine learning based techniques also typically require longer periods of data collection before they’re able to work. Intelligent Test Runner begins working immediately after a baseline of code coverage is gathered.
+While other test solutions calculate test impact analysis using code coverage too, they only consider the last commit diff when evaluating which tests to run. As an example, this is a problem with GitHub’s pull requests, which only take into account the CI status of the latest commit to allow merging. As a result, you must run all commits through CI or risk skipping tests that should have run.
+Intelligent Test Runner leverages per-test code coverage information along with data fromTest Visibilityto search previous tests in all relevant past commits. Configuration of Intelligent Test Runner is a one-click operation in most languages, and the results are accurate and more precise than other methods.
+When you enable Intelligent Test Runner, per-test (or per-suite, depending on the framework) code coverage is transparently collected and sent to Datadog.
+The Datadog backend uses that information to search through previous test runs to determine if a given test can be skipped. If Datadog has a record of the test passing in a commit where the covered andtracked filesare identical to the current commit, the test is skipped. This is used as evidence that the code change didn’t impact the test.
+The Datadog library then removes tests marked as unskippable in source from the skippable tests list. It then proceeds to run the tests, but directs the test framework to skip those that remain in the skippable test list.
+Let’s take a look at a specific example:
+The diagram above shows a developer branch that branches out frommainand has several commits. On each commit, the CI has been running two tests (A and B) with different results.
+Additional helpful documentation, links, and articles:
+Language
+Datadog Site
+On this Page
+
+
+Our friendly, knowledgeable solutions engineers are here to help!
+Download mobile app
+Product
+resources
+About
+BlogConfigure the Intelligent Test Runner
+Infrastructure
+Logs
+Applications
+Security
+Digital Experience
+Software Delivery
+Platform Capabilities
+Industry
+Technology
+Use-case
+Looking for Datadog logos?
+You can find the logo assets on our press page.
+Datadog Docs
+Essentials
+In The App
+Service Management
+Infrastructure
+Application Performance
+Digital Experience
+Software Delivery
+Security
+Log Management
+Administration
+For information about configuration options forIntelligent Test Runner, choose your language:
+Language
+Datadog Site
+On this Page
+
+
+Our friendly, knowledgeable solutions engineers are here to help!
+Download mobile app
+Product
+resources
+About
+BlogIntelligent Test Runner for .NET
+Infrastructure
+Logs
+Applications
+Security
+Digital Experience
+Software Delivery
+Platform Capabilities
+Industry
+Technology
+Use-case
+Looking for Datadog logos?
+You can find the logo assets on our press page.
+Datadog Docs
+Essentials
+In The App
+Service Management
+Infrastructure
+Application Performance
+Digital Experience
+Software Delivery
+Security
+Log Management
+Administration
+Intelligent Test Runner is only supported ondd-trace>= 2.22.0(executedd-trace --versionto get the version of the tool).
+Prior to setting up Intelligent Test Runner, set upTest Visibility for .NET. If you are reporting data through the Agent, use v6.40 and later or v7.40 and later.
+You, or a user in your organization with theIntelligent Test Runner Activation(intelligent_test_runner_activation_write) permission, must activate the Intelligent Test Runner on theTest Service Settingspage.
+After completing setup, run your tests as you normally do by usingdotnet testorVSTest.Console.exe:
+You can override the Intelligent Test Runner’s behavior and prevent specific tests from being skipped. These tests are referred to as unskippable tests.
+The Intelligent Test Runner uses code coverage data to determine whether or not tests should be skipped. In some cases, this data may not be sufficient to make this determination.
+Examples include:
+Add a XUnitTraitAttributewith the keydatadog_itr_unskippableto your test case to mark it as unskippable.
+Add a XUnitTraitAttributewith the keydatadog_itr_unskippableto your test suite to mark it as unskippable.
+If a suite is marked as unskippable, none of the test cases from that suite can be skipped by ITR.
+Add a NUnitPropertyAttributewith the keydatadog_itr_unskippableand a non-null value (for example, string.Empty) to your test case to mark it as unskippable.
+Add a NUnitPropertyAttributewith the keydatadog_itr_unskippableand a non-null value (for example, string.Empty) to your test suite to mark it as unskippable.
+If a suite is marked as unskippable, none of the test cases from that suite can be skipped by ITR.
+Add a MsTestV2TestPropertyAttributewith the keydatadog_itr_unskippableto your test case to mark it as unskippable.
+Additional helpful documentation, links, and articles:
+Language
+Datadog Site
+On this Page
+
+
+Our friendly, knowledgeable solutions engineers are here to help!
+Download mobile app
+Product
+resources
+About
+BlogIntelligent Test Runner for Java
+Infrastructure
+Logs
+Applications
+Security
+Digital Experience
+Software Delivery
+Platform Capabilities
+Industry
+Technology
+Use-case
+Looking for Datadog logos?
+You can find the logo assets on our press page.
+Datadog Docs
+Essentials
+In The App
+Service Management
+Infrastructure
+Application Performance
+Digital Experience
+Software Delivery
+Security
+Log Management
+Administration
+Intelligent Test Runner is supported indd-java-agent >= 1.27.0.
+The following test frameworks are supported:
+Prior to setting up Intelligent Test Runner, set upTest Visibility for Java. If you are reporting data through the Agent, use v6.40 and later or v7.40 and later.
+You, or a user in your organization with theIntelligent Test Runner Activation(intelligent_test_runner_activation_write) permission, must activate the Intelligent Test Runner on theTest Service Settingspage.
+After completing setup, run your tests as you normally do:
+You can override the Intelligent Test Runner’s behavior and prevent specific tests from being skipped. These tests are referred to as unskippable tests.
+The Intelligent Test Runner uses code coverage data to determine whether or not tests should be skipped. In some cases, this data may not be sufficient to make this determination.
+Examples include:
+Unskippable tests are supported in the following versions and testing frameworks:
+Add a JUnitTagwith the valuedatadog_itr_unskippableto your test case to mark it as unskippable.
+Add a JUnitTagwith the valuedatadog_itr_unskippableto your test suite to mark it as unskippable.
+If a suite is marked as unskippable, none of the test cases from that suite can be skipped by ITR.
+Add a JUnitCategorywith the valuedatadog_itr_unskippableto your test case to mark it as unskippable.
+You do not have to create thedatadog_itr_unskippablefor every test case or test suite, one category is enough for the entire project.
+Add a JUnitTagwith the valuedatadog_itr_unskippableto your test suite to mark it as unskippable.
+You do not have to create thedatadog_itr_unskippablefor every test case or test suite, one category is enough for the entire project.
+If a suite is marked as unskippable, none of the test cases from that suite can be skipped by ITR.
+Add a group with the valuedatadog_itr_unskippableto your test case to mark it as unskippable.
+Add a group with the valuedatadog_itr_unskippableto your test suite to mark it as unskippable.
+If a suite is marked as unskippable, none of the test cases from that suite can be skipped by ITR.
+Add aspock.lang.Tagwith the valuedatadog_itr_unskippableto your test case to mark it as unskippable.
+Add aspock.lang.Tagwith the valuedatadog_itr_unskippableto your test suite to mark it as unskippable.
+If a suite is marked as unskippable, none of the test cases from that suite can be skipped by ITR.
+Adddatadog_itr_unskippabletag to your gherkin scenario to mark it as unskippable.
+Adddatadog_itr_unskippabletag to your gherkin feature to mark it as unskippable.
+If a feature is marked as unskippable, none of the scenarios from that feature can be skipped by ITR.
+Create aTagwith the valuedatadog_itr_unskippableand tag your test case with it:
+Additional helpful documentation, links, and articles:
+Language
+Datadog Site
+On this Page
+
+
+Our friendly, knowledgeable solutions engineers are here to help!
+Download mobile app
+Product
+resources
+About
+BlogIntelligent Test Runner for JavaScript and TypeScript
+Infrastructure
+Logs
+Applications
+Security
+Digital Experience
+Software Delivery
+Platform Capabilities
+Industry
+Technology
+Use-case
+Looking for Datadog logos?
+You can find the logo assets on our press page.
+Datadog Docs
+Essentials
+In The App
+Service Management
+Infrastructure
+Application Performance
+Digital Experience
+Software Delivery
+Security
+Log Management
+Administration
+Intelligent Test Runner for JavaScript skips entiretest suites(test files) rather than individual tests.
+Intelligent Test Runner is only supported in the following versions and testing frameworks:
+Prior to setting up Intelligent Test Runner, set upTest Visibility for JavaScript and TypeScript. If you are reporting data through the Agent, use v6.40 and later or v7.40 and later.
+You, or a user in your organization with theIntelligent Test Runner Activation(intelligent_test_runner_activation_write) permission, must activate the Intelligent Test Runner on theTest Service Settingspage.
+After completing setup, run your tests as you normally do:
+After completing setup, run your tests as you normally do:
+For Intelligent Test Runner for Cypress to work, you must instrument your web application with code coverage. For more information about enabling code coverage, see theCypress documentation.
+To check that you’ve successfully enabled code coverage, navigate to your web app with Cypress and check thewindow.__coverage__global variable. This is whatdd-traceuses to collect code coverage for Intelligent Test Runner.
+In some frameworks, such asjest, there are cache mechanisms that make tests faster after other tests have run (seejest cachedocs). If Intelligent Test Runner is skipping all but a few test files, these suites might run slower than they usually do. This is because they run with a colder cache. Regardless of this, total execution time for your test command should still be reduced.
+You can override the Intelligent Test Runner’s behavior and prevent specific tests from being skipped. These tests are referred to as unskippable tests.
+The Intelligent Test Runner uses code coverage data to determine whether or not tests should be skipped. In some cases, this data may not be sufficient to make this determination.
+Examples include:
+Designating tests as unskippable ensures that the Intelligent Test Runner runs them regardless of coverage data.
+You can use the following docblock at the top of your test file to mark a suite as unskippable. This prevents any of the tests defined in the test file from being skipped by Intelligent Test Runner. This is similar to jest’stestEnvironmentOptions.
+You can use the@datadog:unskippabletagin your feature file to mark it as unskippable. This prevents any of the scenarios defined in the feature file from being skipped by Intelligent Test Runner.
+This section shows some examples of tests that should be marked as unskippable.
+Additional helpful documentation, links, and articles:
+Language
+Datadog Site
+On this Page
+
+
+Our friendly, knowledgeable solutions engineers are here to help!
+Download mobile app
+Product
+resources
+About
+BlogIntelligent Test Runner for Python
+Infrastructure
+Logs
+Applications
+Security
+Digital Experience
+Software Delivery
+Platform Capabilities
+Industry
+Technology
+Use-case
+Looking for Datadog logos?
+You can find the logo assets on our press page.
+Datadog Docs
+Essentials
+In The App
+Service Management
+Infrastructure
+Application Performance
+Digital Experience
+Software Delivery
+Security
+Log Management
+Administration
+Intelligent Test Runner is only supported in the following versions and testing frameworks:
+Prior to setting up Intelligent Test Runner, set upTest Visibility for Python. If you are reporting data through the Agent, use v6.40 and later or v7.40 and later.
+You, or a user in your organization with theIntelligent Test Runner Activation(intelligent_test_runner_activation_write) permission, must activate the Intelligent Test Runner on theTest Service Settingspage.
+The Intelligent Test Runner requires thecoveragepackage.
+Install the package in your CI test environment by specifying it in the relevant requirements file, for example, or usingpip:
+Seeknown limitationsif you are already using thecoveragepackage or a plugin likepytest-cov.
+The Intelligent Test Runner is enabled when you run tests with the Datadog integration active. Run your tests with the following command:
+The Intelligent Test Runner can be disabled locally by setting theDD_CIVISIBILITY_ITR_ENABLEDenvironment variable tofalseor0.
+Run the following command to disable the Intelligent Test Runner:
+You can override the Intelligent Test Runner’s behavior and prevent specific tests from being skipped. These tests are referred to as unskippable tests.
+The Intelligent Test Runner uses code coverage data to determine whether or not tests should be skipped. In some cases, this data may not be sufficient to make this determination.
+Examples include:
+Designating tests as unskippable ensures that the Intelligent Test Runner runs them regardless of coverage data.
+Unskippable tests are supported in the following versions:
+You can usepytest’sskipifmarkto prevent the Intelligent Test Runner from skipping individual tests or modules. Specify theconditionasFalse, and thereasonas"datadog_itr_unskippable".
+Individual tests can be marked as unskippable using the@pytest.mark.skipifdecorator as follows:
+Modules can be skipped using thepytestmarkglobal variableas follows:
+Note: This does not override any otherskipmarks, orskipifmarks that have aconditionevaluating toTrue.
+Unskippable tests are supported in the following versions:
+You can useunittest’sskipifmarkto prevent the Intelligent Test Runner from skipping individual tests. Specify theconditionasFalse, and thereasonas"datadog_itr_unskippable".
+Individual tests can be marked as unskippable using the@unittest.skipifdecorator as follows:
+Using@unittest.skipifdoes not override any otherskipmarks, orskipIfmarks that have aconditionevaluating toTrue.
+Coverage data may appear incomplete when the Intelligent Test Runner is enabled. Lines of code that would normally be covered by tests are not be covered when these tests are skipped.
+The Intelligent Test Runner uses thecoveragepackage’s API to collect code coverage. Data fromcoverage runor plugins likepytest-covis incomplete as a result ofddtrace’s use of theCoverageclass.
+Some race conditions may cause exceptions when usingpytestplugins such aspytest-xdistthat change test execution order or introduce parallelization.
+Additional helpful documentation, links, and articles:
+Language
+Datadog Site
+On this Page
+
+
+Our friendly, knowledgeable solutions engineers are here to help!
+Download mobile app
+Product
+resources
+About
+BlogIntelligent Test Runner for Swift
+Infrastructure
+Logs
+Applications
+Security
+Digital Experience
+Software Delivery
+Platform Capabilities
+Industry
+Technology
+Use-case
+Looking for Datadog logos?
+You can find the logo assets on our press page.
+Datadog Docs
+Essentials
+In The App
+Service Management
+Infrastructure
+Application Performance
+Digital Experience
+Software Delivery
+Security
+Log Management
+Administration
+Intelligent Test Runner for Swift is in beta.
+Intelligent Test Runner is only supported ondd-sdk-swift>= 2.2.0.
+Prior to setting up Intelligent Test Runner, set upTest Visibility for Swift. Thecode coverageoption must also be enabled in the test settings of your scheme or test plan, or--enable-code-coveragemust be added to your Swift test command (if using a SPM target).
+If you are reporting data through the Agent, use v6.40 and later or v7.40 and later.
+To enable Intelligent Test Runner, set the following environment variables:
+You, or a user in your organization with theIntelligent Test Runner Activation(intelligent_test_runner_activation_write) permission, must activate the Intelligent Test Runner on theTest Service Settingspage.
+Additional helpful documentation, links, and articles:
+Language
+Datadog Site
+On this Page
+
+
+Our friendly, knowledgeable solutions engineers are here to help!
+Download mobile app
+Product
+resources
+About
+BlogIntelligent Test Runner Troubleshooting
+Infrastructure
+Logs
+Applications
+Security
+Digital Experience
+Software Delivery
+Platform Capabilities
+Industry
+Technology
+Use-case
+Looking for Datadog logos?
+You can find the logo assets on our press page.
+Datadog Docs
+Essentials
+In The App
+Service Management
+Infrastructure
+Application Performance
+Digital Experience
+Software Delivery
+Security
+Log Management
+Administration
+Intelligent Test Runner is not available in the selected site () at this time.
+This page provides information to help you troubleshot issues with Intelligent Test Runner. If you need additional help, contactDatadog Support.
+Intelligent Test Runnerworks by analyzing your commit history along with code coverage information about past test runs to determine which tests need to be run and which ones can be safely skipped. A minimum amount of information needs to exist in order for Intelligent Test Runner to work correctly:
+Due to these restrictions, the first time you enable Intelligent Test Runner, you cannot see any tests skipped and the test execution time may be slower than usual because the code coverage is collected automatically.
+Intelligent Test Runner only takes into account the commit history and test code coverage information for the past month. Additionally, it does not take into account code coverage information that is generated more than one week after a commit was made.
+There is a limitation whensynchronizing a fork through GitHub’s UIwhich causes all tests to be run for the generated synchronization commit.
+Intelligent Test Runner performs test impact analysis based on code coverage to determine which tests are impacted by a given commit or set of commits. While this strategy works for the majority of tests, there are known scenarios where Intelligent Test Runner could skip a test that should have been run:
+If you are authoring a commit that includes any of those cases, you can force-disable test skipping in Intelligent Test Runner by addingITR:NoSkip(case insensitive) anywhere in your Git commit message.
+Additional helpful documentation, links, and articles:
+Language
+Datadog Site
+On this Page
+
+
+Our friendly, knowledgeable solutions engineers are here to help!
+Download mobile app
+Product
+resources
+About
+Blog
